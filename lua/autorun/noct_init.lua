@@ -13,7 +13,7 @@ if SERVER then
     
     end)
 
-    if true then -- for development and testing
+    if false then -- for development and testing
         net.Start("noct_spwn")
             net.WriteFloat(WUMA.Limits[Entity(1):GetUserGroup() .. "_props"].limit or 0)
             net.WriteFloat(WUMA.Limits[Entity(1):GetUserGroup() .. "_sents"].limit or 0)
