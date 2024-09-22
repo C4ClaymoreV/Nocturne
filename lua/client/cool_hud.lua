@@ -13,23 +13,29 @@ local function timeToStr( time )
 	tmp = math.floor( tmp / 60 )
 	local m = tmp % 60
 	tmp = math.floor( tmp / 60 )
-	local h = math.floor( tmp / 24 )
+	local h = math.floor( tmp )
 
 	return string.format( "%02ih %02im %02is", h, m, s )
 end
 
+local bg_col = Color(36, 36, 36, 214)
+local bg_mod_col = Color(36, 36, 36, 100)
+local pfp_bg_col = Color(65, 211, 255)
+local txt_desc_col = Color(148, 148, 148)
+local txt_main_col = Color(255, 255, 255)
+
 net.Receive("noct_spwn", function()
 
-    local PMax = net.ReadTable() -- max props
-    local SMax = net.ReadTable() -- max sents
+    local PMax = net.ReadFloat() -- max props
+    local SMax = net.ReadFloat() -- max sents
     local PANEL = {}
     function PANEL:Init()
         self:SetText( "" )
     end
     function PANEL:Paint() 
-        surface.SetDrawColor(Color(36, 36, 36, 214))
+        surface.SetDrawColor(bg_col)
         surface.DrawTexturedRect( 0, 0, ScrW(), sh(32) )
-        surface.SetDrawColor(Color(65, 211, 255))
+        surface.SetDrawColor(pfp_bg_col)
         surface.DrawRect(0, sh(30), ScrW(), sh(2))
     end
     vgui.Register( "flf_topb", PANEL, "DLabel" )
@@ -44,13 +50,13 @@ net.Receive("noct_spwn", function()
         local width = 2
 
         if FLF_TOG.avatar then
-            surface.SetDrawColor(Color(65, 211, 255))
+            surface.SetDrawColor(pfp_bg_col)
             surface.DrawRect( sw(width), sw(2), sw(24), sw(24) )
             width = width + 28
         end
 
         if FLF_TOG.playtime then
-            surface.SetDrawColor(Color(36, 36, 36, 100)) -- background define
+            surface.SetDrawColor(bg_mod_col) -- background define
             surface.SetFont("TargetIDSmall")
             local ptw = surface.GetTextSize("play time: ")
             surface.SetFont("TargetID")
@@ -58,12 +64,12 @@ net.Receive("noct_spwn", function()
             local tmw = surface.GetTextSize(str)
             surface.DrawRect( sw(width - 2), sh(2), ptw + tmw + sw(4), sh(28) )
 
-            surface.SetTextColor(Color(148, 148, 148))
+            surface.SetTextColor(txt_desc_col)
             surface.SetTextPos(sw(width), sh(16))
             surface.SetFont("TargetIDSmall")
             surface.DrawText("play time: ")
 
-            surface.SetTextColor(Color(255, 255, 255))
+            surface.SetTextColor(txt_main_col)
             surface.SetTextPos(sw(width) + ptw, sh(12))
             surface.SetFont("TargetID")
             surface.DrawText(str)
@@ -84,10 +90,10 @@ net.Receive("noct_spwn", function()
             surface.SetFont("TargetID")
             local rrw = surface.GetTextSize(rnkName)
 
-            surface.SetDrawColor(Color(36, 36, 36, 100))
+            surface.SetDrawColor(bg_mod_col)
             surface.DrawRect( sw(width - 2), sh(2), rsw + rrw + sw(8), sh(28) )
 
-            surface.SetTextColor(Color(148, 148, 148))
+            surface.SetTextColor(txt_desc_col)
             surface.SetTextPos(sw(width), sh(16))
             surface.SetFont("TargetIDSmall")
             surface.DrawText(rstr)
@@ -101,22 +107,22 @@ net.Receive("noct_spwn", function()
 
         if FLF_TOG.props then
             local pstr = "props: "
-            local pcnt = LocalPlayer():GetCount( "props" ) .. "/" .. PMax[LocalPlayer():GetUserGroup()]
+            local pcnt = LocalPlayer():GetCount( "props" ) .. "/" .. PMax
 
             surface.SetFont("TargetIDSmall")
             local psw = surface.GetTextSize(pstr)
 
             surface.SetFont("TargetID")
             local pcw = surface.GetTextSize(pcnt)
-            surface.SetDrawColor(Color(36, 36, 36, 100))
+            surface.SetDrawColor(bg_mod_col)
             surface.DrawRect( sw(width - 2), sh(2), psw + pcw + sw(8), sh(28) )
 
-            surface.SetTextColor(Color(148, 148, 148))
+            surface.SetTextColor(txt_desc_col)
             surface.SetTextPos(sw(width), sh(16))
             surface.SetFont("TargetIDSmall")
             surface.DrawText(pstr)
 
-            surface.SetTextColor(Color(255, 255, 255))
+            surface.SetTextColor(txt_main_col)
             surface.SetTextPos(sw(width + 2) + psw , sh(12))
             surface.SetFont("TargetID")
             surface.DrawText(pcnt)
@@ -125,22 +131,22 @@ net.Receive("noct_spwn", function()
 
         if FLF_TOG.sents then
             local sstr = "sents: "
-            local scnt = LocalPlayer():GetCount( "sents" ) .. "/" .. SMax[LocalPlayer():GetUserGroup()]
+            local scnt = LocalPlayer():GetCount( "sents" ) .. "/" .. SMax
 
             surface.SetFont("TargetIDSmall")
             local ssw = surface.GetTextSize(sstr)
 
             surface.SetFont("TargetID")
             local scw = surface.GetTextSize(scnt)
-            surface.SetDrawColor(Color(36, 36, 36, 100))
+            surface.SetDrawColor(bg_mod_col)
             surface.DrawRect( sw(width - 2), sh(2), ssw + scw + sw(8), sh(28) )
 
-            surface.SetTextColor(Color(148, 148, 148))
+            surface.SetTextColor(txt_desc_col)
             surface.SetTextPos(sw(width), sh(16))
             surface.SetFont("TargetIDSmall")
             surface.DrawText(sstr)
 
-            surface.SetTextColor(Color(255, 255, 255))
+            surface.SetTextColor(txt_main_col)
             surface.SetTextPos(sw(width + 2) + ssw , sh(12))
             surface.SetFont("TargetID")
             surface.DrawText(scnt)
@@ -154,7 +160,7 @@ net.Receive("noct_spwn", function()
             surface.SetFont("HudDefault")
             local snw = surface.GetTextSize(sstr)
 
-            surface.SetTextColor(Color(255, 255, 255))
+            surface.SetTextColor(txt_main_col)
             surface.SetTextPos(ScrW()/2 - snw/2, sh(8))
             surface.SetFont("HudDefault")
             surface.DrawText(sstr)
@@ -170,10 +176,10 @@ net.Receive("noct_spwn", function()
             local tsw = surface.GetTextSize(tstr)
 
             local refpoint = ScrW() - tsw - sw(width + 4)
-            surface.SetDrawColor(Color(36, 36, 36, 100))
+            surface.SetDrawColor(bg_mod_col)
             surface.DrawRect( refpoint, sh(2), tsw + sw(8), sh(28) )
 
-            surface.SetTextColor(Color(255, 255, 255))
+            surface.SetTextColor(txt_main_col)
             surface.SetTextPos( refpoint + sw(2), sh(12))
             surface.DrawText(tstr)
 
@@ -191,15 +197,15 @@ net.Receive("noct_spwn", function()
             local pcw = surface.GetTextSize(uptime)
 
             local refpoint = ScrW() - usw - pcw - sw(width + 6)
-            surface.SetDrawColor(Color(36, 36, 36, 100))
+            surface.SetDrawColor(bg_mod_col)
             surface.DrawRect( refpoint, sh(2), usw + pcw + sw(8), sh(28) )
 
-            surface.SetTextColor(Color(148, 148, 148))
+            surface.SetTextColor(txt_desc_col)
             surface.SetTextPos( refpoint + sw(2), sh(16))
             surface.SetFont("TargetIDSmall")
             surface.DrawText(upstr)
 
-            surface.SetTextColor(Color(255, 255, 255))
+            surface.SetTextColor(txt_main_col)
             surface.SetTextPos(refpoint + sw(2) + usw , sh(12))
             surface.SetFont("TargetID")
             surface.DrawText(uptime)

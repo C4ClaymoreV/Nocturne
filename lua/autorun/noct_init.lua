@@ -7,16 +7,16 @@ if SERVER then
     hook.Add("PlayerSpawn", "flf_noct_ispwn", function( ply ) -- updates the player when spawning, allows for updating mid server runtime
     
         net.Start("noct_spwn")
-            net.WriteTable(URS.limits.prop)
-            net.WriteTable(URS.limits.sent)
+            net.WriteFloat(WUMA.Limits[ply:GetUserGroup() .. "_props"].limit or 0)
+            net.WriteFloat(WUMA.Limits[ply:GetUserGroup() .. "_sents"].limit or 0)
         net.Send(ply)
     
     end)
 
-    if false then -- for development and testing
+    if true then -- for development and testing
         net.Start("noct_spwn")
-            net.WriteTable(URS.limits.prop)
-            net.WriteTable(URS.limits.sent)
+            net.WriteFloat(WUMA.Limits[Entity(1):GetUserGroup() .. "_props"].limit or 0)
+            net.WriteFloat(WUMA.Limits[Entity(1):GetUserGroup() .. "_sents"].limit or 0)
         net.Send(Entity(1))
     end
 end
@@ -25,6 +25,7 @@ if CLIENT then
     include("client/cool_hud.lua")
 
     FLF_TOG = {
+        enabled = true,
         avatar = true,
         playtime = true,
         rank = true,
