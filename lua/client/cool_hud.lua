@@ -233,14 +233,15 @@ net.Receive("noct_spwn", function()
     end
 
     hook.Add("HUDPaintBackground", "flf_noct_hudb", function()
-
-        topb:PaintManual()
+        if FLF_TOG.hud then
+            topb:PaintManual()
+        end
         
     end)
 
     hook.Add("HUDPaint", "flf_noct_hud", function()
-
-        top:PaintManual()
-        
+        if FLF_TOG.hud then
+            top:PaintManual()
+        end
     end)
 end)
