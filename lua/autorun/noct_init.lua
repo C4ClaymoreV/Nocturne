@@ -1,4 +1,4 @@
-if not urs or WUMA then return end
+if not isValid(urs) or isValid(WUMS) then return end
 local method = 0
 if urs then method = 1 elseif WUMA then method = 2
 
