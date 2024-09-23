@@ -1,24 +1,30 @@
-if not WUMA then return end
-if not WUMA.Limits then return end -- if there is no limits table the addon will not load
+if not urs or WUMA then return end
+local method = 0
+if urs then method = 1 elseif WUMA then method = 2
+
 if SERVER then
     AddCSLuaFile("client/cool_hud.lua")
 
     util.AddNetworkString("noct_spwn")
 
     hook.Add("PlayerSpawn", "flf_noct_ispwn", function( ply ) -- updates the player when spawning, allows for updating mid server runtime
+
+        local proplimit = 0
+        local sentlimit = 0
+        if method == 1 then
+            proplimit = urs.limits[ply:GetUserGroup()]
+            sentlimit = urs.limits[ply:GetUserGroup()]
+        elseif method == 2 then
+            proplimit = WUMA.Limits[ply:GetUserGroup() .. "_props"].limit or
+            sentlimit = WUMA.Limits[ply:GetUserGroup() .. "_sents"].limit
+        end
+
         net.Start("noct_spwn")
-            net.WriteFloat(WUMA.Limits[ply:GetUserGroup() .. "_props"].limit or 0)
-            net.WriteFloat(WUMA.Limits[ply:GetUserGroup() .. "_sents"].limit or 0)
+            net.WriteFloat(proplimit)
+            net.WriteFloat(sentlimit)
         net.Send(ply)
     
     end)
-
-    if false then -- for development and testing
-        net.Start("noct_spwn")
-            net.WriteFloat(WUMA.Limits[Entity(1):GetUserGroup() .. "_props"].limit or 0)
-            net.WriteFloat(WUMA.Limits[Entity(1):GetUserGroup() .. "_sents"].limit or 0)
-        net.Send(Entity(1))
-    end
 end
 
 if CLIENT then
