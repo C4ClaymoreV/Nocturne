@@ -15,7 +15,7 @@ if SERVER then
             proplimit = urs.limits[ply:GetUserGroup()]
             sentlimit = urs.limits[ply:GetUserGroup()]
         elseif method == 2 then
-            proplimit = WUMA.Limits[ply:GetUserGroup() .. "_props"].limit or
+            proplimit = WUMA.Limits[ply:GetUserGroup() .. "_props"].limit
             sentlimit = WUMA.Limits[ply:GetUserGroup() .. "_sents"].limit
         end
 
