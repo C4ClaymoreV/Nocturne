@@ -1,6 +1,6 @@
 if not isValid(urs) or isValid(WUMS) then return end
 local method = 0
-if urs then method = 1 elseif WUMA then method = 2
+if urs then method = 1 elseif WUMA then method = 2 end
 
 if SERVER then
     AddCSLuaFile("client/cool_hud.lua")
